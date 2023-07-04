@@ -36,3 +36,17 @@ out/
 ### VS Code ###
 .vscode/
 /src/main/resources/custom.properties
+*.h
+nodeenv-18/src/node-v18.16.0-darwin-arm64/share/systemtap/tapset/node.stp
+*.1
+nodeenv-18/src/node-v18.16.0-darwin-arm64/share/doc/node/gdbinit
+*.py
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/yallist/iterator.js
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/yallist/yallist.js
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/yallist/LICENSE
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/wrappy/wrappy.js
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/wrappy/LICENSE
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/wide-align/align.js
+nodeenv-18/src/node-v18.16.0-darwin-arm64/lib/node_modules/npm/node_modules/which/LICENSE
+*.ts
+*.js
