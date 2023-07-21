@@ -12,18 +12,16 @@ public class Signup {
     private String phone;
     private String nickName;
     private String email;
-    private String password;
+    private String pwd;
     private String address;
 
     @Builder
-    public Signup(String name, String phone, String nickName, String email, String password, String address) {
+    public Signup(String name, String phone, String nickName, String email, String pwd, String address) {
         this.name = name;
         this.phone = phone;
         this.nickName = nickName;
         this.email = email;
-        this.password = password;
+        this.pwd = pwd;
         this.address = address;
     }
-
-
 }

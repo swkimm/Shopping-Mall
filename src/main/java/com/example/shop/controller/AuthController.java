@@ -5,11 +5,13 @@ import com.example.shop.domain.Signup;
 import com.example.shop.request.LoginRequest;
 import com.example.shop.service.AuthService;
 import com.example.shop.service.MemberService;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Map;
 import java.util.Optional;
 
 @RestController
@@ -22,8 +24,10 @@ public class AuthController {
     AuthService authService;
 
     @PostMapping("/auth/signup")
-    public void signup(Signup signup) throws Exception {
-
+    public void signup(@RequestBody Map<String, Object> request) throws Exception {
+        System.out.println("signup.getName() = " + request);
+        ObjectMapper objectMapper = new ObjectMapper();
+        Signup signup = objectMapper.convertValue(request.get("signupMember"), Signup.class);
         authService.signup(signup);
 
     }

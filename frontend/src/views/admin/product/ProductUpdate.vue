@@ -2,7 +2,7 @@
   <h1> {{ pId }}번 상품 수정 페이지</h1>
   <div class="container-lg">
     <div class="row justify-content-center">
-      <div class="col-12 col-md-8 col-lg-6">
+      <div class="col-12 col-md-10 col-lg-8">
         <h1>상품 수정</h1>
 
         <div class="mb-3">
@@ -10,6 +10,15 @@
           <input v-model="product.categoryName" class="form-control" type="text" readonly/>
         </div>
 
+        <div class="mb-3">
+          <label class="form-label">상태</label>
+          <select class="form-select" v-model="product.pstatus">
+            <option value="기본">기본</option>
+            <option value="품절">품절</option>
+            <option value="이벤트">이벤트</option>
+            <option value="할인">할인</option>
+          </select>
+        </div>
         <div class="mb-3">
           <label class="form-label">상품명</label>
           <input v-model="product.pname" class="form-control" type="text"/>
@@ -43,13 +52,27 @@
           <input v-model="product.pcolor" class="form-control" type="text"/>
         </div>
 
+        <!-- 유튜브 링크 -->
+        <div class="mb-3">
+          <label class="form-label">유튜브 링크</label>
+          <div v-for="(link, index) in product.linkName" :key="index">
+            <input class="col-lg-10" v-model="product.linkName[index]" type="text"/>
+            <button @click="deleteLink(link)" class="fa-solid fa-trash" style="background-color: red"></button>
+          </div>
+          <div v-if="showNewLinkInput">
+            <input v-model="newLinkName" type="text" class="col-lg-10"/>
+            <button @click="addLink" class="fa-solid fa-check"></button>
+            <br>
+          </div>
+          <button @click="newLink">링크추가</button>
+        </div>
+
         <!-- 파일 등록  -->
         <!-- 체크 박스 눌린것들 상품 수정 버튼 누르면 삭제되도록해야됨, 그리고 이미지 추가된것들도 추가되도록       -->
         <div class="mb-3">
           <div v-for="(fileName, index) in product.fileName" :key="index">
-            <label :for="'removeCheckBox' + index">
-              <button @click="deleteImg(fileName)" class="fa-solid fa-trash"></button>
-            </label>
+            <label :for="'removeCheckBox' + index">이미지</label><br>
+            <button @click="deleteImg(fileName)" class="fa-solid fa-trash" style="background-color: red"></button>
             <div class="mb-3">
               <img class="img-fluid img-thumbnail"
                    :src="`https://bucket230503-zvdwq133sdjmh.s3.ap-northeast-2.amazonaws.com/shop/${pId}/${fileName}`"
@@ -77,7 +100,7 @@
 <script setup>
 
 import axios from "axios";
-import {onMounted, defineProps, ref, reactive} from "vue";
+import {onMounted, defineProps, ref, reactive, watch} from "vue";
 import router from "@/router";
 
 const props = defineProps({
@@ -88,7 +111,22 @@ const props = defineProps({
 });
 
 const product = reactive({});
-const productImg = ref([])
+const productImg = ref([]);
+const youtubeLink = ref([]);
+const newLinkName = ref('');
+const showNewLinkInput = ref(false);
+
+
+watch(() => product.linkName, (newValue, oldValue, index) => {
+  console.log('유튜브 링크 변경 감지:');
+  console.log('이전 값:', oldValue);
+  console.log('새 값:', newValue);
+  console.log('변경된 값의 인덱스:', index);
+});
+
+const newLink = () => {
+  showNewLinkInput.value = true
+}
 
 // const product = reactive({
 //   pName: '',
@@ -100,6 +138,39 @@ const productImg = ref([])
 //   pColor: '',
 //   fileName: []
 // });
+
+const addLink = () => {
+  console.log(newLinkName.value)
+  const youtubeReg = "https://www.youtube.com/embed/";
+  if (newLinkName.value.indexOf(youtubeReg) === 0) {
+    axios.post(`/api/products/addLink/${props.pId}`, {
+      pId : props.pId,
+      linkName : newLinkName.value
+    })
+        .then((response) => {
+          console.log(response.data)
+          location.reload()
+        })
+  } else {
+    alert("정상적인 유튜브 링크를 입력하세요");
+  }
+}
+
+const deleteLink = (linkName) => {
+  console.log(linkName)
+  axios.post(`/api/products/deleteLink/${props.pId}`, {
+    pId: props.pId,
+    linkName: linkName
+  })
+      .then((response) => {
+        alert("링크가 삭제되었습니다.")
+      })
+      .catch((error) => {
+        if (error) {
+          alert("링크 삭제 시 오류가 발생하였습니다.")
+        }
+      })
+}
 
 const deleteImg = (fileName) => {
   console.log(fileName)
@@ -173,6 +244,7 @@ const getProduct = () => {
 const updateProduct = async () => {
   const updateData = new FormData();
   updateData.append("pName", product.pname)
+  updateData.append("pStatus", product.pstatus)
   updateData.append("pPrice", product.pprice)
   updateData.append("pStock", product.pstock)
   updateData.append("pBrand", product.pbrand)
@@ -180,6 +252,12 @@ const updateProduct = async () => {
   updateData.append("pSize", product.psize)
   updateData.append("pColor", product.pcolor)
 
+  if (youtubeLink.value.length > 0) {
+    for (let i = 0; i < youtubeLink.value.length; i++) {
+      updateData.append('linkName', youtubeLink.value[i]);
+    }
+    ;
+  }
 
   if (productImg.value && productImg.value.files && productImg.value.files.length > 0) {
     for (let i = 0; i < productImg.value.files.length; i++) {

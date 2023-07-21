@@ -37,7 +37,7 @@
                       style="background-color: white; color: black"></button>
             </div>
             <div class="navbar-item">
-              <button class="fa-solid fa-cart-shopping fa-xl" style="background-color: white; color: black"></button>
+              <RouterLink @click="askLoginOrGoToCart" to="/cart" class="fa-solid fa-cart-shopping fa-xl" style="background-color: white; color: black"></RouterLink>
             </div>
           </div>
         </nav>
@@ -95,6 +95,25 @@ const shouldShowFirstContent = computed(() => {
   const currentUser = user.value;
   return !currentUser || currentUser.authority === 1;
 });
+
+const askLoginOrGoToCart = () => {
+  // Check if the user is logged in
+  if (!user.value) {
+    // If not logged in, show the confirmation dialog
+    const shouldLogin = window.confirm('로그인하시겠습니까?');
+    if (shouldLogin) {
+      // If the user confirms, redirect to the login page
+      router.push('/login');
+    } else {
+      location.reload();
+      // 이전 페이지로 이동
+      // history.back();
+    }
+  } else {
+    // If the user is logged in, directly navigate to the cart page
+    router.push('/cart');
+  }
+};
 
 const logout = () => {
   store.dispatch("logoutUser");

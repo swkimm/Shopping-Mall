@@ -24,9 +24,12 @@ public class AuthService {
 
 
         var members = Members.builder()
+                .name((signup.getName()))
+                .phone((signup.getPhone()))
+                .nickName((signup.getNickName()))
                 .email(signup.getEmail())
-                .pwd(signup.getPassword())
-                .name(signup.getName())
+                .pwd(signup.getPwd())
+                .address(signup.getAddress())
                 .build();
         memberMapper.save(members);
 

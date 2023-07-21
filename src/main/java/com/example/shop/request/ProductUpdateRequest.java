@@ -12,6 +12,7 @@ public class ProductUpdateRequest {
     private Integer pId;
     private Integer categoryId;
     private String categoryName;
+    private String pStatus;
     private String pName;
     private Integer pPrice;
     private String pBrand;
@@ -20,11 +21,14 @@ public class ProductUpdateRequest {
     private String pSize;
     private String pColor;
     private List<String> fileName;
+    private List<String> linkName;
 
-    public ProductUpdateRequest(Integer pId, Integer categoryId, String categoryName, String pName, Integer pPrice, String pBrand, String pDesc, Integer pStock, String pSize, String pColor, List<String> fileName) {
+
+    public ProductUpdateRequest(Integer pId, Integer categoryId, String categoryName, String pStatus, String pName, Integer pPrice, String pBrand, String pDesc, Integer pStock, String pSize, String pColor, List<String> fileName, List<String> linkName) {
         this.pId = pId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
+        this.pStatus = pStatus;
         this.pName = pName;
         this.pPrice = pPrice;
         this.pBrand = pBrand;
@@ -33,5 +37,6 @@ public class ProductUpdateRequest {
         this.pSize = pSize;
         this.pColor = pColor;
         this.fileName = fileName;
+        this.linkName = linkName;
     }
 }

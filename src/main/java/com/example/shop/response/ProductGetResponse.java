@@ -20,8 +20,9 @@ public class ProductGetResponse {
     private String pSize;
     private String pColor;
     private List<String> fileName;
+    private List<String> linkName;
 
-    public ProductGetResponse(Integer pId, Integer categoryId, String categoryName, String pName, Integer pPrice, String pBrand, String pDesc, String pStatus, Integer pStock, String pSize, String pColor, List<String> fileName) {
+    public ProductGetResponse(Integer pId, Integer categoryId, String categoryName, String pName, Integer pPrice, String pBrand, String pDesc, String pStatus, Integer pStock, String pSize, String pColor, List<String> fileName, List<String> linkName) {
         this.pId = pId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -34,5 +35,6 @@ public class ProductGetResponse {
         this.pSize = pSize;
         this.pColor = pColor;
         this.fileName = fileName;
+        this.linkName = linkName;
     }
 }

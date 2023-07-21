@@ -6,31 +6,34 @@
       <div class="login-form">
         <input v-model="email" type="email" placeholder="Email" required />
         <input v-model="password" type="password" placeholder="Password" required />
-        <button type="button" class="btn btn-primary" @click="loginPost">로그인</button>
-        <div>
-          <RouterLink :to="{path : '/signup', replace:true}">
-            <button type="button" class="btn btn-secondary">회원가입</button>
-          </RouterLink>
+        <div class="button-row">
+          <button type="button" class="btn btn-primary" @click="loginPost">로그인</button>
+          <RouterLink :to="{path : '/signup', replace:true}" class="btn btn-secondary">회원가입</RouterLink>
         </div>
       </div>
     </div>
   </div>
-  <div v-else="">
 
-  </div>
 </template>
 
 <script setup>
-import { onMounted, ref } from 'vue';
+import {computed, onMounted, ref} from 'vue';
 import axios from 'axios';
 import router from '@/router';
+
 import { useStore } from 'vuex';
+
+
 
 const store = useStore();
 const email = ref('');
 const password = ref('');
 const isLoggedIn = ref(false); // 로그인 상태를 저장하는 변수
 const user = ref({});
+
+const nickName = computed(() => store.getters.getNickName)
+
+
 
 const loginPost = () => {
   axios
@@ -40,14 +43,16 @@ const loginPost = () => {
       })
       .then(response => {
         user.value = response.data;
-        localStorage.setItem('user', JSON.stringify(user.value)); // 로컬 스토리지에 저장
+        localStorage.setItem('user', JSON.stringify(user.value));
 
-        isLoggedIn.value = true; // 로그인 상태로 변경
+        isLoggedIn.value = true;
         store.dispatch('loginUser', user.value);
-        router.push('/');
+
+        alert(nickName.value + "님 환영합니다.");
+
+        history.back();
       })
       .catch(error => {
-        // 로그인 실패 처리
         console.error(error);
       });
 };

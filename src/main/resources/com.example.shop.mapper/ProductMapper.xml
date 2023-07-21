@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
 <mapper namespace="com.example.shop.mapper.ProductMapper">
     <resultMap id="productResultMap" type="com.example.shop.response.ProductListResponse">
         <id column="pId" property="pId" />
@@ -10,6 +11,21 @@
         <result column="pBrand" property="pBrand"/>
         <result column="pStatus" property="pStatus"/>
         <result column="pStock" property="pStock"/>
+        <result column="pSize" property="pSize"/>
+        <result column="pColor" property="pColor"/>
+        <collection ofType="java.lang.String" property="fileName">
+            <result column="fileName" />
+        </collection>
+    </resultMap>
+
+    <resultMap id="eventProductResultMap" type="com.example.shop.response.EventProductListResponse">
+        <id column="pId" property="pId" />
+        <result column="categoryId" property="categoryId"/>
+        <result column="categoryName" property="categoryName"/>
+        <result column="pName" property="pName"/>
+        <result column="pPrice" property="pPrice"/>
+        <result column="pBrand" property="pBrand"/>
+        <result column="pStatus" property="pStatus"/>
         <result column="pSize" property="pSize"/>
         <result column="pColor" property="pColor"/>
         <collection ofType="java.lang.String" property="fileName">
@@ -31,6 +47,9 @@
         <result column="pColor" property="pColor"/>
         <collection ofType="java.lang.String" property="fileName">
             <result column="fileName" />
+        </collection>
+        <collection ofType="java.lang.String" property="linkName">
+            <result column="linkName" />
         </collection>
     </resultMap>
 </mapper>

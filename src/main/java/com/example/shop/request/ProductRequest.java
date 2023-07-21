@@ -18,10 +18,13 @@ public class ProductRequest {
     private String pDesc;
     private String pSize;
     private String pColor;
+    private String pStatus;
+    private List<String> linkName;
     private List<String> fileName;
 
+
     @Builder
-    public ProductRequest(Integer cId, String pName, Integer pPrice, Integer pStock, String pBrand, String pDesc, String pSize, String pColor, List<String> fileName) {
+    public ProductRequest(Integer cId, String pName, Integer pPrice, Integer pStock, String pBrand, String pDesc, String pSize, String pColor, String pStatus, List<String> linkName, List<String> fileName) {
         this.cId = cId;
         this.pName = pName;
         this.pPrice = pPrice;
@@ -30,6 +33,8 @@ public class ProductRequest {
         this.pDesc = pDesc;
         this.pSize = pSize;
         this.pColor = pColor;
+        this.pStatus = pStatus;
+        this.linkName = linkName;
         this.fileName = fileName;
     }
 }

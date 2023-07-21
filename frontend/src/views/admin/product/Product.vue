@@ -7,10 +7,6 @@
       <button>상품 등록</button>
     </router-link>
   </div>
-  <div>
-
-  </div>
-
   <br>
   <table class="table">
     <thead>
@@ -18,10 +14,10 @@
       <th>이미지</th>
       <th>카테고리</th>
       <th>상품번호</th>
+      <th>브랜드</th>
       <th>상품명</th>
       <th>가격</th>
       <th>재고</th>
-      <th>브랜드</th>
       <th>사이즈</th>
       <th>색상</th>
       <th>수정/삭제</th>
@@ -36,10 +32,10 @@
       </td>
       <td>{{ product.categoryName }}</td>
       <td>{{ product.pid }}</td>
+      <td>{{ product.pbrand }}</td>
       <td>{{ product.pname }}</td>
       <td>{{ product.pprice }}</td>
       <td>{{ product.pstock }}</td>
-      <td>{{ product.pbrand }}</td>
       <td>{{ product.psize }}</td>
       <td>{{ product.pcolor }}</td>
       <td>
@@ -82,7 +78,7 @@ const deleteProduct = (pid) => {
         location.reload()
       })
       .catch((error) => {
-        if(error.response) {
+        if (error.response) {
           alert("삭제 시 문제가 발생하였습니다.")
         }
       })

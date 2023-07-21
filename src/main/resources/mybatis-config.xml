@@ -7,5 +7,7 @@
     </typeAliases>
     <mappers>
         <mapper resource="com.example.shop.mapper/ProductMapper.xml"/>
+        <mapper resource="com.example.shop.mapper/CartMapper.xml"/>
+        <mapper resource="com.example.shop.mapper/MemberMapper.xml"/>
     </mappers>
 </configuration>
