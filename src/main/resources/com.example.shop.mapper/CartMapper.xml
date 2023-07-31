@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.shop.mapper.CartMapper">
+
+    <resultMap id="cartResultMap" type="com.example.shop.response.CartListResponse">
+        <id column="pId" property="pId" />
+        <result column="pBrand" property="pBrand"/>
+        <result column="pName" property="pName"/>
+        <result column="pPrice" property="pPrice"/>
+        <result column="pSize" property="pSize"/>
+        <result column="pColor" property="pColor"/>
+        <result column="pStock" property="pStock"/>
+        <result column="pStatus" property="pStatus"/>
+        <result column="cartId" property="cartId"/>
+        <result column="productId" property="productId" />
+        <result column="memberId" property="memberId"/>
+        <result column="productQty" property="productQty"/>
+        <collection ofType="java.lang.String" property="fileName">
+            <result column="fileName" />
+        </collection>
+    </resultMap>
+
+</mapper>
