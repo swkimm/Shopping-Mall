@@ -1,11 +1,11 @@
 package com.example.shop.controller;
 
 import com.example.shop.domain.Categories;
-import com.example.shop.request.*;
-import com.example.shop.response.EventProductListResponse;
-import com.example.shop.response.ProductGetResponse;
-import com.example.shop.response.ProductListResponse;
-import com.example.shop.response.YoutubeLinkResponse;
+import com.example.shop.request.product.DeleteImgRequest;
+import com.example.shop.request.product.DeleteLinkRequest;
+import com.example.shop.request.product.ProductRequest;
+import com.example.shop.request.product.ProductUpdateRequest;
+import com.example.shop.response.*;
 import com.example.shop.service.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,13 +26,35 @@ public class ProductController {
     @PostMapping("/products/getList")
     public List<ProductListResponse> getAllList() {
         return productService.getAllList();
+    }    @PostMapping("/products/getListWithCategoryId")
+    public List<ProductListResponse> getListWithCategoryId(@RequestBody Map<String, Integer> request) {
+        Integer categoryId = request.get("categoryId");
+        return productService.getListWithCategoryId(categoryId);
     }
 
-    @PostMapping("/products/helmet/getList")
+    @PostMapping("/products/item/getList")
     public List<ProductListResponse> getList(@RequestBody Map<String, Object> request) {
-        Integer categoryId = (Integer) request.get("helmetCategoryId");
+        Integer categoryId = (Integer) request.get("categoryId");
         System.out.println("categoryId = " + categoryId);
-        return productService.getHelmetList(categoryId);
+        return productService.getItemList(categoryId);
+    }
+
+    @PostMapping("/products/item/searchByBrand")
+    public List<ProductListResponse> searchByBrand(@RequestBody Map<String, Object> request) {
+        Integer categoryId = (Integer) request.get("categoryId");
+        String brand = (String) request.get("brand");
+        System.out.println("categoryId = " + categoryId);
+        System.out.println("brand = " + brand);
+        return productService.searchByBrand(categoryId, brand);
+    }
+
+    @PostMapping("/products/item/searchByColor")
+    public List<ProductListResponse> searchByColor(@RequestBody Map<String, Object> request) {
+        Integer categoryId = (Integer) request.get("categoryId");
+        String color = (String) request.get("color");
+        System.out.println("categoryId = " + categoryId);
+        System.out.println("color = " + color);
+        return productService.searchByColor(categoryId, color);
     }
 
     @PostMapping("/categories/getCategoryList")
@@ -138,6 +160,19 @@ public class ProductController {
         System.out.println("productUpdateRequest = " + productUpdateRequest);
         productService.updateProduct(productUpdateRequest, files);
     }
+
+    @PostMapping("/products/getBrandList")
+    public List<GetBrandCountResponse> getBrandList(@RequestBody Map<String, Integer> request) {
+        Integer categoryId = request.get("categoryId");
+        return productService.getBrandList(categoryId);
+    }
+
+    @PostMapping("/products/getColorList")
+    public List<GetColorCountResponse> getColorList(@RequestBody Map<String, Integer> request) {
+        Integer categoryId = request.get("categoryId");
+        return productService.getColorList(categoryId);
+    }
+
 
 //    @PostMapping("/products/updateProduct/{pId}")
 //    public void updateProduct(@PathVariable("pId") Integer pId, ProductGetResponse productGetResponse,

@@ -1,16 +1,13 @@
 package com.example.shop.service;
 
 import com.example.shop.domain.Members;
-import com.example.shop.domain.Signup;
 import com.example.shop.mapper.MemberMapper;
-import com.example.shop.request.MemberUpdateRequest;
+import com.example.shop.request.member.MemberUpdateRequest;
 import com.example.shop.response.MemberListResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Service
 public class MemberService {

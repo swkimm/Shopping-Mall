@@ -2,14 +2,10 @@ package com.example.shop.mapper;
 
 import com.example.shop.domain.Categories;
 import com.example.shop.domain.Products;
-import com.example.shop.request.DeleteImgRequest;
-import com.example.shop.request.DeleteLinkRequest;
-import com.example.shop.request.ProductRequest;
-import com.example.shop.request.ProductUpdateRequest;
-import com.example.shop.response.EventProductListResponse;
-import com.example.shop.response.ProductGetResponse;
-import com.example.shop.response.ProductListResponse;
-import com.example.shop.response.YoutubeLinkResponse;
+import com.example.shop.request.product.DeleteImgRequest;
+import com.example.shop.request.product.DeleteLinkRequest;
+import com.example.shop.request.product.ProductUpdateRequest;
+import com.example.shop.response.*;
 import org.apache.ibatis.annotations.*;
 
 import java.util.List;
@@ -38,7 +34,52 @@ public interface ProductMapper {
             WHERE c.categoryId = #{categoryId};
             """)
     @ResultMap("productResultMap")
-    List<ProductListResponse> getProductList(Integer categoryId);
+    List<ProductListResponse> getItemList(Integer categoryId);
+    @Select("""
+            SELECT
+            	p.pId
+            	, c.categoryId
+            	, c.categoryName
+            	, p.pName
+            	, p.pPrice
+            	, p.pBrand
+            	, p.pStatus
+            	, p.pStock
+            	, p.pSize
+            	, p.pColor
+            	, pf.fileName
+            FROM Products p
+            LEFT JOIN 
+                Categories c ON c.categoryId = p.cId
+            LEFT JOIN 
+                ProductFile pf ON pf.productId = p.pId
+            WHERE c.categoryId = #{categoryId} AND p.pBrand = #{brand};
+            """)
+    @ResultMap("productResultMap")
+    List<ProductListResponse> searchByBrand(Integer categoryId, String brand);
+
+    @Select("""
+            SELECT
+            	p.pId
+            	, c.categoryId
+            	, c.categoryName
+            	, p.pName
+            	, p.pPrice
+            	, p.pBrand
+            	, p.pStatus
+            	, p.pStock
+            	, p.pSize
+            	, p.pColor
+            	, pf.fileName
+            FROM Products p
+            LEFT JOIN 
+                Categories c ON c.categoryId = p.cId
+            LEFT JOIN 
+                ProductFile pf ON pf.productId = p.pId
+            WHERE c.categoryId = #{categoryId} AND p.pColor = #{color};
+            """)
+    @ResultMap("productResultMap")
+    List<ProductListResponse> searchByColor(Integer categoryId, String color);
 
 
     @Select("""
@@ -164,10 +205,36 @@ public interface ProductMapper {
                 Categories c ON c.categoryId = p.cId
             LEFT JOIN
                 ProductFile pf ON pf.productId = p.pId
+            ORDER BY p.pId ASC
             """)
     @ResultMap("productResultMap")
     List<ProductListResponse> getAllList();
 
+
+
+    @Select("""
+            SELECT
+                p.pId
+                , c.categoryId
+                , c.categoryName
+                , p.pName
+                , p.pPrice
+                , p.pBrand
+                , p.pStatus
+                , p.pStock
+                , p.pSize
+                , p.pColor
+                , pf.fileName
+            FROM Products p
+            LEFT JOIN
+                Categories c ON c.categoryId = p.cId
+            LEFT JOIN
+                ProductFile pf ON pf.productId = p.pId
+            WHERE c.categoryId = #{categoryId}
+            ORDER BY p.pId ASC
+            """)
+    @ResultMap("productResultMap")
+    List<ProductListResponse> getListWithCategoryId(Integer categoryId);
 
     @Select("""
             SELECT * FROM ProductYoutubeLink
@@ -209,4 +276,21 @@ public interface ProductMapper {
             """)
     @ResultMap("eventProductResultMap")
     List<EventProductListResponse> getEventProductList(String pStatus);
+
+    @Select("""
+            SELECT pBrand, COUNT(*) AS brandCount
+            FROM Products p
+            WHERE cid = #{categoryId}
+            GROUP BY pBrand;
+            """)
+    List<GetBrandCountResponse> getBrandList(Integer categoryId);
+
+    @Select("""
+            SELECT pColor, COUNT(*) AS colorCount
+            FROM Products p
+            WHERE cid = #{categoryId}
+            GROUP BY pColor;
+            """)
+    List<GetColorCountResponse> getColorList(Integer categoryId);
+
 }

@@ -1,8 +1,7 @@
 package com.example.shop.mapper;
 
 import com.example.shop.domain.Members;
-import com.example.shop.domain.Signup;
-import com.example.shop.request.MemberUpdateRequest;
+import com.example.shop.request.member.MemberUpdateRequest;
 import com.example.shop.response.MemberListResponse;
 import org.apache.ibatis.annotations.*;
 

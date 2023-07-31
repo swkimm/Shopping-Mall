@@ -3,14 +3,11 @@ package com.example.shop.service;
 import com.example.shop.domain.Categories;
 import com.example.shop.domain.Products;
 import com.example.shop.mapper.ProductMapper;
-import com.example.shop.request.DeleteImgRequest;
-import com.example.shop.request.DeleteLinkRequest;
-import com.example.shop.request.ProductRequest;
-import com.example.shop.request.ProductUpdateRequest;
-import com.example.shop.response.EventProductListResponse;
-import com.example.shop.response.ProductGetResponse;
-import com.example.shop.response.ProductListResponse;
-import com.example.shop.response.YoutubeLinkResponse;
+import com.example.shop.request.product.DeleteImgRequest;
+import com.example.shop.request.product.DeleteLinkRequest;
+import com.example.shop.request.product.ProductRequest;
+import com.example.shop.request.product.ProductUpdateRequest;
+import com.example.shop.response.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -41,8 +38,8 @@ public class ProductService {
     private String bucketName;
 
 
-    public List<ProductListResponse> getHelmetList(Integer categoryId) {
-        return productMapper.getProductList(categoryId);
+    public List<ProductListResponse> getItemList(Integer categoryId) {
+        return productMapper.getItemList(categoryId);
     }
 
 
@@ -168,5 +165,25 @@ public class ProductService {
 
     public List<EventProductListResponse> getEventProductList(String pStatus) {
         return productMapper.getEventProductList(pStatus);
+    }
+
+    public List<ProductListResponse> getListWithCategoryId(Integer categoryId) {
+        return productMapper.getListWithCategoryId(categoryId);
+    }
+
+    public List<GetBrandCountResponse> getBrandList(Integer categoryId) {
+        return productMapper.getBrandList(categoryId);
+    }
+
+    public List<ProductListResponse> searchByBrand(Integer categoryId, String brand) {
+        return productMapper.searchByBrand(categoryId, brand);
+    }
+
+    public List<GetColorCountResponse> getColorList(Integer categoryId) {
+        return productMapper.getColorList(categoryId);
+    }
+
+    public List<ProductListResponse> searchByColor(Integer categoryId, String color) {
+        return productMapper.searchByColor(categoryId, color);
     }
 }

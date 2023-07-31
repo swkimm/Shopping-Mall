@@ -1,18 +1,26 @@
 <template>
-  <h1>여기는 헬멧 페이지</h1>
+
   <div>
-    <img class="helmetTop" :src="helmetTopImg1"/>
+    <img class="helmetTop" :src="helmetTopImg"/>
   </div>
 
   <hr>
   <div class="page-container">
     <div class="sidebar">
-      <h1>사이드바</h1>
+      <h4>브랜드</h4>
+      <ul><a href="#" @click="getProductList">전체보기</a></ul>
+      <div v-for="brand in brandList">
+        <ul><a href="#" @click="searchByBrand(brand.pbrand)">{{ brand.pbrand }} ({{ brand.brandCount }})</a></ul>
+      </div>
+      <br>
+      <h4>색상</h4>
+      <ul><a href="#" @click="getProductList">전체보기</a></ul>
+      <div v-for="color in colorList">
+        <ul><a href="#" @click="searchByColor(color.pcolor)">{{ color.pcolor }} ({{ color.colorCount }})</a></ul>
+      </div>
 
     </div>
     <div class="content">
-      <h1>상품 리스트</h1>
-
       <div class="card-wrapper">
         <div class="card" v-for="product in filteredProductList" @click="goToProductDetail(product.pid)">
           <div class="image-wrapper">
@@ -24,8 +32,7 @@
               <p>{{ product.pbrand }}</p>
               <p>{{ product.pname }}</p>
               <p>{{ product.pcolor }}</p>
-              <p>{{ product.pprice }}원</p>
-              <button>장바구니</button>
+              <h5><strong>{{ formatPrice(product?.pprice) }}원</strong></h5>
             </div>
           </div>
         </div>
@@ -33,25 +40,73 @@
     </div>
   </div>
 
-
 </template>
 
 <script setup>
-import helmetTopImg1 from "@/assets/helmetTopImg1.jpeg";
-import helmetSample1 from "@/assets/helmetSample1.png";
+import helmetTopImg from "@/assets/helmetTopImg.png";
 import {computed, onMounted, ref} from "vue";
 import axios from "axios";
 import {useRouter} from 'vue-router';
+import store from "@/store/store";
 
 const router = useRouter();
+const authority = computed(() => store.getters.getAuthority);
+const categoryId = 1;
+const brandList = ref([])
+const colorList = ref([])
+
+const getColorList = () => {
+  const categoryId = 1;
+  axios.post("/api/products/getColorList", {
+    categoryId: categoryId,
+  })
+      .then((response) => {
+        colorList.value = response.data
+      })
+      .catch((error) => {
+        if(error) {
+          alert("색상 불러오기 오류입니다.")
+        }
+      })
+}
+
+const getBrandList = () => {
+  const categoryId = 1;
+  axios.post("/api/products/getBrandList", {
+    categoryId: categoryId,
+  })
+      .then((response) => {
+        brandList.value = response.data
+        console.log(response.data)
+      })
+      .catch((error) => {
+        if (error) {
+          alert(error)
+        }
+      })
+}
 
 const goToProductDetail = (pId) => {
-  router.push(`/product/detail/${pId}`);
+  router.push(`/productDetail/${pId}`);
 };
 
 const filteredProductList = computed(() => {
   return productList.value.filter(product => product.categoryId === 1);
 });
+
+function addCommasToNumber(number) {
+  return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+}
+
+// 가격을 1000 단위 콤마(,)가 포함된 형식으로 변환하는 메소드
+function formatPrice(price) {
+  if (price) {
+    return addCommasToNumber(price);
+  } else {
+    return ''; // or any default value you prefer when the price is not available
+  }
+}
+
 
 const productList = ref([]);
 
@@ -62,23 +117,62 @@ const getFirstImageURL = (product) => {
   return ''; // Return empty string if no image available
 };
 
-const helmetCategoryId = 1;
 
 const getProductList = async () => {
   try {
-    const response = await axios.post('/api/products/helmet/getList', {helmetCategoryId: helmetCategoryId}, {
+    const response = await axios.post('/api/products/item/getList', {categoryId: categoryId}, {
       headers: {"Content-Type": "application/json"} // 수정: 객체 형태로 전달되어야 함
     });
     productList.value = response.data;
     console.log(productList.value);
-    console.log(helmetCategoryId);
   } catch (error) {
     console.error(error);
   }
 };
 
+const searchByBrand = (brand) => {
+  console.log(brand)
+  axios.post('/api/products/item/searchByBrand', {
+    categoryId: categoryId,
+    brand: brand,
+  })
+      .then((response) => {
+        productList.value = response.data;
+        console.log("searchByBrand", response.data)
+      })
+      .catch((error) => {
+        if (error) {
+          alert("브랜드별 상품 가져오기 오류입니다.")
+        }
+      })
+}
+
+const searchByColor = (color) => {
+  console.log(color)
+  axios.post('/api/products/item/searchByColor', {
+    categoryId: categoryId,
+    color : color,
+  })
+      .then((response) => {
+        productList.value = response.data;
+        console.log("searchByColor", response.data)
+      })
+      .catch((error) => {
+        if (error) {
+          alert("색상별 상품 가져오기 오류입니다.")
+        }
+      })
+
+
+}
+
 onMounted(() => {
   getProductList()
+  getColorList()
+  getBrandList()
+  if (authority.value === 2) {
+    router.push("/");
+  }
 });
 </script>
 
@@ -104,33 +198,36 @@ onMounted(() => {
   margin-left: auto;
   margin-right: auto;
   display: flex;
-  max-width: 80%;
+  max-width: 60%;
   max-height: 800px;
 }
 
 .card-wrapper {
   display: flex;
   flex-wrap: wrap;
+  cursor: pointer;
 }
 
 .card {
-  margin: 10px;
+  margin: 5px;
   flex: 1 0 25%;
-  max-width: 23%;
+  max-width: 24%;
   padding: 6px;
   box-sizing: border-box;
 }
 
-/* Add a fixed height to the image wrapper */
 .image-wrapper {
-  height: 250px; /* Adjust this value as needed */
+  height: 300px; /* Adjust this value as needed */
   overflow: hidden;
+  display: flex; /* Add display: flex; to create a flex container */
+  align-items: center; /* Center the content vertically */
+  justify-content: center;
 }
 
 /* Make the image cover the entire image wrapper without distortion */
 .image-wrapper img {
-  width: 100%;
-  height: 100%;
+  width: 80%;
+  height: 80%;
   object-fit: cover;
 }
 

@@ -4,8 +4,8 @@
     <div class="login-container">
       <h1>Login</h1>
       <div class="login-form">
-        <input v-model="email" type="email" placeholder="Email" required />
-        <input v-model="password" type="password" placeholder="Password" required />
+        <input v-model="email" type="email" placeholder="Email" required/>
+        <input v-model="password" type="password" placeholder="Password" required/>
         <div class="button-row">
           <button type="button" class="btn btn-primary" @click="loginPost">로그인</button>
           <RouterLink :to="{path : '/signup', replace:true}" class="btn btn-secondary">회원가입</RouterLink>
@@ -21,8 +21,7 @@ import {computed, onMounted, ref} from 'vue';
 import axios from 'axios';
 import router from '@/router';
 
-import { useStore } from 'vuex';
-
+import {useStore} from 'vuex';
 
 
 const store = useStore();
@@ -32,28 +31,38 @@ const isLoggedIn = ref(false); // 로그인 상태를 저장하는 변수
 const user = ref({});
 
 const nickName = computed(() => store.getters.getNickName)
-
+const authority = computed(() => store.getters.getAuthority)
 
 
 const loginPost = () => {
+  console.log(password.value)
+  // Login request data 생성
+  const loginRequest = {
+    email: email.value,
+    pwd: password.value,
+  };
+
   axios
-      .post('/api/auth/login', {
-        email: email.value,
-        password: password.value,
-      })
+      .post('/api/auth/login', loginRequest) // 수정된 부분: loginRequest 객체 전달
       .then(response => {
-        user.value = response.data;
-        localStorage.setItem('user', JSON.stringify(user.value));
-
-        isLoggedIn.value = true;
-        store.dispatch('loginUser', user.value);
-
-        alert(nickName.value + "님 환영합니다.");
-
-        history.back();
+        if (response.data) {
+          // Successful login
+          user.value = response.data;
+          localStorage.setItem('user', JSON.stringify(user.value));
+          isLoggedIn.value = true;
+          store.dispatch('loginUser', user.value);
+          alert(nickName.value + '님 환영합니다.');
+          router.push('/');
+        } else {
+          // Login failed
+          isLoggedIn.value = false;
+          alert('로그인 실패: 아이디 또는 비밀번호가 잘못되었습니다.');
+        }
       })
       .catch(error => {
-        console.error(error);
+        // Error occurred during the login request
+        console.error('Error during login:', error);
+        alert('로그인 오류입니다.');
       });
 };
 
@@ -67,6 +76,8 @@ const checkLoginStatus = () => {
 
 const logout = () => {
   localStorage.removeItem('user'); // 로컬 스토리지에서 사용자 정보 제거
+  localStorage.removeItem('orderId');
+
   user.value = {};
   isLoggedIn.value = false;
   router.push('/login');

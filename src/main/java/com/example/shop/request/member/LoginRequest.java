@@ -1,4 +1,4 @@
-package com.example.shop.request;
+package com.example.shop.request.member;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

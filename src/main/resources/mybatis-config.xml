@@ -9,5 +9,6 @@
         <mapper resource="com.example.shop.mapper/ProductMapper.xml"/>
         <mapper resource="com.example.shop.mapper/CartMapper.xml"/>
         <mapper resource="com.example.shop.mapper/MemberMapper.xml"/>
+        <mapper resource="com.example.shop.mapper/OrderMapper.xml"/>
     </mappers>
 </configuration>

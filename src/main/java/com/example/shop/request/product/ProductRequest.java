@@ -1,4 +1,4 @@
-package com.example.shop.request;
+package com.example.shop.request.product;
 
 import lombok.Builder;
 import lombok.Data;

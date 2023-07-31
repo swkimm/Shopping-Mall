@@ -1,7 +1,7 @@
 package com.example.shop.controller;
 
 import com.example.shop.domain.Members;
-import com.example.shop.request.MemberUpdateRequest;
+import com.example.shop.request.member.MemberUpdateRequest;
 import com.example.shop.response.MemberListResponse;
 import com.example.shop.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -50,7 +50,7 @@
             <label class="form-label">변경할 주소</label>
             <br>
             <div class="input-group">
-              <input class="form-control" id="postcode" placeholder="우편번호">
+              <input class="form-control" id="postcode" v-model="postcode" placeholder="우편번호">
               <input class="btn btn-outline-secondary" @click="search()" value="우편번호 찾기">
             </div>
             <input v-model="roadAddress" readonly class="form-control" type="text" id="roadAddress"
@@ -106,6 +106,7 @@ import store from "@/store/store";
 import router from "@/router";
 
 
+const postcode = ref("")
 const roadAddress = ref("");
 const extraAddress = ref("");
 const detailAddress = ref("");
@@ -126,7 +127,6 @@ const memberInfo = ref({
 
 const activeTab = ref('/profile');
 
-// 예시로 간단히 URL 파라미터로 activeTab을 설정하는 방법
 if (authority === 2) {
   const params = new URLSearchParams(window.location.search);
   const tabParam = params.get('tab');
@@ -214,7 +214,7 @@ watchEffect(() => {
 const updateProfile = (authority) => {
 
   if (authority === 1) {
-    const newAddressValue = roadAddress.value + extraAddress.value + detailAddress.value;
+    const newAddressValue = postcode.value + " " + roadAddress.value + extraAddress.value + " " + detailAddress.value;
 
     let updateValue;
 
@@ -261,7 +261,8 @@ const updateProfile = (authority) => {
           localStorage.setItem('user', JSON.stringify(user));
 
 
-          router.push('/');
+          // router.push('/');
+          location.reload();
 
         })
         .catch((error) => {
@@ -357,6 +358,10 @@ onMounted(() => {
   margin: 0 auto; /* Centers the content horizontally within the remaining space */
   max-width: 800px; /* Optional: Limits the maximum width of the content */
   align-items: center;
+}
+
+.sidebar h3 {
+  cursor: pointer;
 }
 
 </style>

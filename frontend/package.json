@@ -9,7 +9,9 @@
   },
   "dependencies": {
     "axios": "^1.4.0",
-    "vue": "^3.3.4",
+    "bootstrap": "^5.3.0",
+    "chart.js": "^3.7.0",
+    "vue": "^3.2.36",
     "vue-cookies": "^1.8.3",
     "vue-router": "^4.2.2",
     "vuex": "^4.0.2"

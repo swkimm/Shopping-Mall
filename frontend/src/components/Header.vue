@@ -11,7 +11,7 @@
                   <RouterLink class="nav-link active" aria-current="page" to="/helmets">헬멧</RouterLink>
                 </li>
                 <li class="nav-item">
-                  <RouterLink class="nav-link active" aria-current="page" to="/shoulder-pads">숄더 패드</RouterLink>
+                  <RouterLink class="nav-link active" aria-current="page" to="/shoulderPads">숄더 패드</RouterLink>
                 </li>
                 <li class="nav-item">
                   <RouterLink class="nav-link active" aria-current="page" to="/apparel">의류</RouterLink>

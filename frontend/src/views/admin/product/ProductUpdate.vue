@@ -164,6 +164,7 @@ const deleteLink = (linkName) => {
   })
       .then((response) => {
         alert("링크가 삭제되었습니다.")
+        location.reload()
       })
       .catch((error) => {
         if (error) {

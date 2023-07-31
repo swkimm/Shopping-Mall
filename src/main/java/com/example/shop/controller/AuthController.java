@@ -2,7 +2,7 @@ package com.example.shop.controller;
 
 import com.example.shop.domain.Members;
 import com.example.shop.domain.Signup;
-import com.example.shop.request.LoginRequest;
+import com.example.shop.request.member.LoginRequest;
 import com.example.shop.service.AuthService;
 import com.example.shop.service.MemberService;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -34,10 +34,8 @@ public class AuthController {
 
     @PostMapping("/auth/login")
     public Optional<Members> login(@RequestBody LoginRequest loginRequest) throws Exception {
-
-        Optional<Members> members = authService.login(loginRequest);
         System.out.println("loginRequest = " + loginRequest);
-        return members;
+        return authService.login(loginRequest);
     }
 
 

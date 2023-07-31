@@ -4,9 +4,10 @@ package com.example.shop.service;
 import com.example.shop.domain.Members;
 import com.example.shop.domain.Signup;
 import com.example.shop.mapper.MemberMapper;
-import com.example.shop.request.LoginRequest;
+import com.example.shop.request.member.LoginRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.Optional;
 
@@ -36,18 +37,19 @@ public class AuthService {
     }
 
     public Optional<Members> login(LoginRequest loginRequest) throws Exception {
-
         Optional<Members> members = memberMapper.findByEmail(loginRequest.getEmail());
-//        if (loginRequest.getEmail() == members.get().getEmail()) {
-//            // Reqeust로 DB에 저장된 Members 조회
-//            System.out.println("로그인 성공");
-//            return members;
-//
-//        } else {
-//            System.out.println("로그인 오류");
-//            return Optional.empty();
-//        }
-            return members;
-
+        if (members.isPresent()) {
+            Members member = members.get();
+            if (member.getPwd().equals(loginRequest.getPwd())) {
+                System.out.println("로그인 성공");
+                return members;
+            } else {
+                System.out.println("비밀번호 오류");
+                return Optional.empty();
+            }
+        } else {
+            System.out.println("아이디 오류");
+            return Optional.empty();
+        }
     }
 }

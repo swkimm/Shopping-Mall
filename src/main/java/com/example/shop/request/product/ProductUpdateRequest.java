@@ -1,4 +1,4 @@
-package com.example.shop.request;
+package com.example.shop.request.product;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

@@ -1,12 +1,17 @@
 <template>
-  <h1>매출 관리 페이지</h1>
+  <div>
+    <h1>매출 현황</h1>
+    <SalesBarChart />
+
+
+  </div>
 </template>
 
 <script setup>
+import SalesBarChart from "@/components/SalesBarChart.vue";
 
 </script>
 
-
-<style scoped>
+<style>
 
 </style>
