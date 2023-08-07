@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <typeAliases>
+        <package name="com.example.shop.domain"/>
+        <package name="com.example.shop.response"/>
+    </typeAliases>
+    <mappers>
+        <mapper resource="com.example.shop.mapper/ProductMapper.xml"/>
+        <mapper resource="com.example.shop.mapper/CartMapper.xml"/>
+        <mapper resource="com.example.shop.mapper/MemberMapper.xml"/>
+        <mapper resource="com.example.shop.mapper/OrderMapper.xml"/>
+    </mappers>
+</configuration>

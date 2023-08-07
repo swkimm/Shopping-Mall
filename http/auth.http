@@ -1,0 +1,27 @@
+### 회원가입
+POST http://localhost:5173/api/auth/signup
+Content-Type: application/json
+
+{
+  "name" : "admin",
+  "email" : "admin@admin.com",
+  "password" : "admin"
+}
+
+### 로그인
+POST http://localhost:5173/api/auth/login
+Content-Type: application/json
+
+{
+  "email" : "admin@admin.com",
+  "password" : "admin"
+}
+
+### 사용자
+GET http://localhost:5173/api/auth/user
+
+### 관리자
+GET http://localhost:5173/api/auth/admin
+
+### 메인페이지
+GET http://localhost:5173/api/
