@@ -1,5 +1,4 @@
 <template>
-  <h1>상품디테일 {{ props.pId }}</h1>
 
   <div class="container text-center">
     <div class="row">
@@ -19,6 +18,8 @@
         </div>
       </div>
       <div class="col productInfo">
+        <br>
+        <br>
         <h2>{{ product.pbrand }} {{ product.pname }}</h2><br>
         <hr>
         <br>
@@ -53,8 +54,7 @@
             <i class="fa-solid fa-angle-left fa-2xl"></i>
           </div>
           <div class="card-wrapper">
-            <div class="card" v-for="(event, index) in visibleEvents" :key="event.pid"
-                 @click="goToProductDetail(event.pid)">
+            <div class="card" v-for="(event, index) in visibleEvents" :key="event.pid" @click="goToProductDetail(event.pid)">
               <div v-if="props.pId !== event.pid">
                 <div class="image-wrapper">
                   <img :src="getFirstImageURL(event)" alt="">
@@ -206,10 +206,11 @@ const goToCart = () => {
   router.push("/cart")
 }
 
-const goToProductDetail = (newPId) => {
-  console.log(newPId)
-  router.push(`/productDetail/${newPId}`);
-}
+const goToProductDetail = (pid) => {
+  console.log(pid);
+  router.push(`/productDetail/${pid}`);
+};
+
 
 const getFirstImageURL = (product) => {
   if (product.fileName && product.fileName.length > 0) {
@@ -231,6 +232,8 @@ const getEventProductList = () => {
         // Filter out the current product from the eventProduct list
         eventProduct.value = response.data;
         console.log(response.data);
+        getProductYoutubeLinkList();
+
       })
       .catch((error) => {
         if (error) {
@@ -255,6 +258,8 @@ const getProductDetail = () => {
         console.log(response.data);
         // 첫 번째 이미지를 선택된 이미지로 설정합니다
         selectedImage.value = getOriginalImageURL(product.value.fileName[0]);
+        getProductYoutubeLinkList();
+
       })
       .catch((error) => {
         // 에러 처리 로직
@@ -279,9 +284,8 @@ const scrollToTop = () => {
 };
 
 onMounted(() => {
-  getProductDetail();
-  getProductYoutubeLinkList();
   getEventProductList();
+  getProductDetail();
   scrollToTop();
 });
 

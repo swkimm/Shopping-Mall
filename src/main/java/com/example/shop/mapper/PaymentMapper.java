@@ -74,6 +74,8 @@ public interface PaymentMapper {
                 Payment p
             WHERE 
                 memberId = #{memberId}
+            ORDER BY 
+                orderId DESC;
             """)
     List<DeliveryInfoResponse> getDeliveryInfoPayment(Integer memberId);
 

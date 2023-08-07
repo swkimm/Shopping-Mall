@@ -1,5 +1,4 @@
 <template>
-  <h1>결제 성공 화면</h1>
 
   <div class="payment-container" >
     <div class="payment-confirmation">

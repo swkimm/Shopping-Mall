@@ -25,6 +25,7 @@
         <div class="card" v-for="product in filteredProductList" @click="goToProductDetail(product.pid)">
           <div class="image-wrapper">
             <img :src="getFirstImageURL(product)" alt=""/>
+            <i class="fa-regular fa-heart fa-2xl"></i>
           </div>
           <div class="card-body">
             <div class="card-text">
@@ -64,7 +65,7 @@ const getColorList = () => {
         colorList.value = response.data
       })
       .catch((error) => {
-        if(error) {
+        if (error) {
           alert("색상 불러오기 오류입니다.")
         }
       })
@@ -106,7 +107,6 @@ function formatPrice(price) {
     return ''; // or any default value you prefer when the price is not available
   }
 }
-
 
 const productList = ref([]);
 
@@ -151,7 +151,7 @@ const searchByColor = (color) => {
   console.log(color)
   axios.post('/api/products/item/searchByColor', {
     categoryId: categoryId,
-    color : color,
+    color: color,
   })
       .then((response) => {
         productList.value = response.data;
@@ -162,8 +162,6 @@ const searchByColor = (color) => {
           alert("색상별 상품 가져오기 오류입니다.")
         }
       })
-
-
 }
 
 onMounted(() => {
@@ -222,6 +220,13 @@ onMounted(() => {
   display: flex; /* Add display: flex; to create a flex container */
   align-items: center; /* Center the content vertically */
   justify-content: center;
+  position: relative;
+}
+
+.fa-heart {
+  position: absolute;
+  top: 20px; /* Adjust the value to move the heart down */
+  right: 10px; /* Adjust the value to move the heart to the left */
 }
 
 /* Make the image cover the entire image wrapper without distortion */

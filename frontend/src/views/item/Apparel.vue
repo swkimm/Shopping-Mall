@@ -22,6 +22,7 @@
         <div class="card" v-for="product in filteredProductList" @click="goToProductDetail(product.pid)">
           <div class="image-wrapper">
             <img :src="getFirstImageURL(product)" alt=""/>
+            <i class="fa-regular fa-heart fa-2xl"></i>
           </div>
           <div class="card-body">
             <div class="card-text">
@@ -220,6 +221,13 @@ onMounted(() => {
   display: flex; /* Add display: flex; to create a flex container */
   align-items: center; /* Center the content vertically */
   justify-content: center;
+  position: relative;
+}
+
+.fa-heart {
+  position: absolute;
+  top: 20px; /* Adjust the value to move the heart down */
+  right: 10px; /* Adjust the value to move the heart to the left */
 }
 
 /* Make the image cover the entire image wrapper without distortion */

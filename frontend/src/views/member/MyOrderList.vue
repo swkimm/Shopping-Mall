@@ -43,37 +43,33 @@
         </div>
         <div v-else>
           <div v-for="order in orderList">
-            <!-- todo 배송중 배송완료로 변경  -->
-            <div v-if="order.paymentStatus === '결제완료'">
+            <div class="card container">
+              <div style="margin-top: 10px">
+                <h4><strong>{{ formatPaymentDate(order.paymentDate) }}</strong> 주문</h4>
 
-              <div class="card container">
-                <div style="margin-top: 10px">
-                  <h4><strong>{{ formatPaymentDate(order.paymentDate) }}</strong> 주문</h4>
-
-                </div>
-                <div class="card container" style="margin-bottom: 10px">
-                  <div class="row" style="margin-top: 10px">
-                    <div class="col">
-                      <h4>{{ order.paymentStatus }}</h4>
-                      <img class="product-image"
-                           :src="getRepresentativeImageURL(order)"
-                           alt=""/>
-                    </div>
-                    <div class="col-6" style="margin-top: 30px">
-                      <h4><a href="#" @click="goToProductDetail(order.productId)">{{ order.productName }}</a></h4>
-                      <h5>{{ formatPrice(order.productPrice) }}원, {{ order.productQty }}개</h5>
-                    </div>
-                    <div class="col d-flex justify-content-center align-items-end">
-                      <button @click="addToCart(order.productId, order.productQty)" type="button"
-                              class="btn btn-primary btn-lg">장바구니 추가
-                      </button>
-                    </div>
-                  </div>
-                  <br>
-                </div>
               </div>
-              <br>
+              <div class="card container" style="margin-bottom: 10px">
+                <div class="row" style="margin-top: 10px">
+                  <div class="col">
+                    <h4>{{ order.paymentStatus }}</h4>
+                    <img class="product-image"
+                         :src="getRepresentativeImageURL(order)"
+                         alt=""/>
+                  </div>
+                  <div class="col-6" style="margin-top: 30px">
+                    <h4><a href="#" @click="goToProductDetail(order.productId)">{{ order.productName }}</a></h4>
+                    <h5>{{ formatPrice(order.productPrice) }}원, {{ order.productQty }}개</h5>
+                  </div>
+                  <div class="col d-flex justify-content-center align-items-end">
+                    <button @click="addToCart(order.productId, order.productQty)" type="button"
+                            class="btn btn-primary btn-lg">장바구니 추가
+                    </button>
+                  </div>
+                </div>
+                <br>
+              </div>
             </div>
+            <br>
           </div>
         </div>
       </div>
@@ -104,6 +100,7 @@ function formatPrice(price) {
     return ''; // or any default value you prefer when the price is not available
   }
 }
+
 function addCommasToNumber(number) {
   return number.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
 }
@@ -216,7 +213,7 @@ const addToCart = async (productId, productQty) => {
 // }
 
 const goToProductDetail = (productId) => {
-  router.push(`/product/detail/${productId}`)
+  router.push(`/productDetail/${productId}`)
 }
 
 const getRepresentativeImageURL = (order) => {

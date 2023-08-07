@@ -1,12 +1,12 @@
 <template>
   <div class="container">
-    <h1>{{ currentYear }}년 월별 매출</h1>
+    <h2>{{ currentYear }}년 월별 매출</h2>
     <div>
-      <canvas id="myChart" height="400" width="800"></canvas>
+      <canvas id="myChart" height="400" width="1000"></canvas>
     </div>
-    <h1>연도별 매출</h1>
+    <h2>연도별 매출</h2>
     <div>
-      <canvas id="myChart2" height="400" width="800"></canvas>
+      <canvas id="myChart2" height="400" width="1000"></canvas>
     </div>
 
   </div>
