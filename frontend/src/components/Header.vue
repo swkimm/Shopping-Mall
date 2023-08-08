@@ -35,6 +35,8 @@
                       style="background-color: white; color: black"></button>
               <button @click="profile" class="nav-item nav-link active fa-solid fa-user fa-xl"
                       style="background-color: white; color: black"></button>
+              <button @click="liked" class="nav-item nav-link active fa-solid fa-heart fa-xl"
+                      style="background-color: white; color: black"></button>
             </div>
             <div class="navbar-item">
               <RouterLink @click="askLoginOrGoToCart" to="/cart" class="fa-solid fa-cart-shopping fa-xl" style="background-color: white; color: black"></RouterLink>
@@ -122,6 +124,10 @@ const logout = () => {
 
 const profile = () => {
   router.push("/profile")
+}
+
+const liked = () => {
+  router.push("/liked")
 }
 
 </script>

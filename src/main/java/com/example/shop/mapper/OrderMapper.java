@@ -125,6 +125,12 @@ public interface OrderMapper {
             """)
     @ResultMap("ordersByDateRangeResultMap")
     List<OrdersByDateRangeResponse> getOrderByDateRange(Integer memberId, String startDate, String endDate);
+
+    @Select("""
+            SELECT MAX(orderId) 
+            FROM Orders
+            """)
+    Integer getMaxOrderId();
 }
 
 

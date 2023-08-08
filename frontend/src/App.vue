@@ -5,7 +5,7 @@
   <EventBanner></EventBanner>
   <RouterView />
   <br>
-<!--  <h5>{{user}}</h5>-->
+  <h5>{{user}}</h5>
   <Footer></Footer>
 </template>
 

@@ -7,9 +7,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PaymentVerificationRequest {
 
-    private int paidAmount;
+    private int amount;
 
-    public PaymentVerificationRequest(int paidAmount) {
-        this.paidAmount = paidAmount;
+    public PaymentVerificationRequest(int amount) {
+        this.amount = amount;
     }
 }

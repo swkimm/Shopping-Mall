@@ -90,5 +90,10 @@ public class OrderController {
         return orderService.getOrdersByDateRange(memberId, startDate, endDate);
     }
 
+    @PostMapping("/order/getMaxOrderId")
+    public Integer getMaxOrderId() {
+        return orderService.getMaxOrderId() + 1;
+    }
+
 }
 

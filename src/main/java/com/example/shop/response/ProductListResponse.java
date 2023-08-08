@@ -21,8 +21,10 @@ public class ProductListResponse {
     private String pSize;
     private String pColor;
     private List<String> fileName;
+    private Integer likeCount;
+    private boolean liked;
 
-    public ProductListResponse(Integer pId, Integer categoryId, String categoryName, String pName, Integer pPrice, String pBrand, String pStatus, Integer pStock, String pSize, String pColor, List<String> fileName) {
+    public ProductListResponse(Integer pId, Integer categoryId, String categoryName, String pName, Integer pPrice, String pBrand, String pStatus, Integer pStock, String pSize, String pColor, List<String> fileName, Integer likeCount, boolean liked) {
         this.pId = pId;
         this.categoryId = categoryId;
         this.categoryName = categoryName;
@@ -34,5 +36,7 @@ public class ProductListResponse {
         this.pSize = pSize;
         this.pColor = pColor;
         this.fileName = fileName;
+        this.likeCount = likeCount;
+        this.liked = liked;
     }
 }

@@ -19,10 +19,13 @@
     </div>
     <div class="content">
       <div class="card-wrapper">
-        <div class="card" v-for="product in filteredProductList" @click="goToProductDetail(product.pid)">
+        <div class="card" v-for="product in filteredProductList" :key="product.pid"
+             @click="goToProductDetail(product.pid)">
           <div class="image-wrapper">
             <img :src="getFirstImageURL(product)" alt=""/>
-            <i class="fa-regular fa-heart fa-2xl"></i>
+            <i v-if="product.liked" :class="getHeartIconClass(product)"
+               @click="toggleHeart(product); stopPropagation($event)"></i>
+            <i v-else :class="getHeartIconClass(product)" @click="toggleHeart(product); stopPropagation($event)"></i>
           </div>
           <div class="card-body">
             <div class="card-text">
@@ -48,9 +51,55 @@ import store from "@/store/store";
 
 const router = useRouter();
 const authority = computed(() => store.getters.getAuthority);
+const memberId = computed(() => store.getters.getMemberId);
 const categoryId = 3;
 const brandList = ref([])
 const colorList = ref([])
+
+const stopPropagation = (event) => {
+  event.stopPropagation();
+}
+
+const getHeartIconClass = (product) => {
+  return product.liked
+      ? 'fa-solid fa-heart fa-2xl'
+      : 'fa-regular fa-heart fa-2xl';
+};
+
+const toggleHeart = async (product) => {
+  console.log("toggleHeart")
+  const liked = !product.liked;
+
+  try {
+    const response = await axios.post('/api/products/insertLike', {
+      memberId: memberId.value,
+      productId: product.pid,
+      liked: liked,
+    });
+
+    if (response.status === 200) {
+      console.log(productList.value)
+      const foundProduct = productList.value.find(p => p.pid === product.pid);
+      console.log("foundProduct", foundProduct)
+      if (foundProduct) {
+        foundProduct.liked = true; // 상품 객체의 liked 프로퍼티 업데이트
+      }
+    } else {
+      alert('좋아요 토글 실패');
+    }
+  } catch (error) {
+    if (memberId.value === null) {
+      const result = confirm("로그인 하시겠습니까?")
+      if (result === true) {
+        await router.push("/login")
+      } else {
+        location.reload()
+      }
+    } else {
+      alert("좋아요 기능 오류 입니다.")
+    }
+  }
+};
 
 const getColorList = () => {
   const categoryId = 3;
@@ -117,50 +166,89 @@ const getFirstImageURL = (product) => {
 
 const getProductList = async () => {
   try {
-    const response = await axios.post('/api/products/item/getList', {categoryId: categoryId}, {
-      headers: {"Content-Type": "application/json"} // 수정: 객체 형태로 전달되어야 함
+    const likedProductsResponse = await axios.post('/api/products/likedProducts', {
+          memberId: memberId.value || null
+        }
+    );
+
+    const likedProducts = likedProductsResponse.data;
+
+    const response = await axios.post('/api/products/item/getList', {
+      categoryId: categoryId
+    }, {
+      headers: {"Content-Type": "application/json"}
     });
-    productList.value = response.data;
+    const productListData = response.data;
+
+    // 좋아요를 누른 상품들의 productId 목록과 productListData를 비교하여 liked 값을 설정
+    productList.value = productListData.map(product => ({
+      ...product,
+      liked: likedProducts.includes(product.pid)
+    }));
     console.log(productList.value);
-    console.log(categoryId);
-  } catch (error) {
+  } catch
+      (error) {
     console.error(error);
   }
 };
 
 const searchByBrand = (brand) => {
-  console.log(brand)
+  console.log(brand);
   axios.post('/api/products/item/searchByBrand', {
     categoryId: categoryId,
     brand: brand,
+    memberId: memberId.value || null // memberId가 없는 경우 null로 설정
   })
-      .then((response) => {
-        productList.value = response.data;
-        console.log("searchByBrand", response.data)
+      .then(async (response) => {
+        const likedProductsResponse = await axios.post('/api/products/likedProducts', {
+          memberId: memberId.value || null
+        });
+
+        const likedProducts = likedProductsResponse.data;
+
+        const productsWithLikedStatus = response.data.map(product => ({
+          ...product,
+          liked: likedProducts.includes(product.pid)
+        }));
+
+        productList.value = productsWithLikedStatus;
+        console.log("searchByBrand", productsWithLikedStatus);
       })
       .catch((error) => {
         if (error) {
-          alert("브랜드별 상품 가져오기 오류입니다.")
+          alert("브랜드별 상품 가져오기 오류입니다.");
         }
-      })
-}
+      });
+};
 
 const searchByColor = (color) => {
-  console.log(color)
+  console.log(color);
   axios.post('/api/products/item/searchByColor', {
     categoryId: categoryId,
-    color : color,
+    color: color,
+    memberId: memberId.value || null // memberId가 없는 경우 null로 설정
   })
-      .then((response) => {
-        productList.value = response.data;
-        console.log("searchByColor", response.data)
+      .then(async (response) => {
+        const likedProductsResponse = await axios.post('/api/products/likedProducts', {
+          memberId: memberId.value || null
+        });
+
+        const likedProducts = likedProductsResponse.data;
+
+        const productsWithLikedStatus = response.data.map(product => ({
+          ...product,
+          liked: likedProducts.includes(product.pid)
+        }));
+
+        productList.value = productsWithLikedStatus;
+        console.log("searchByColor", productsWithLikedStatus);
       })
       .catch((error) => {
         if (error) {
-          alert("색상별 상품 가져오기 오류입니다.")
+          alert("색상별 상품 가져오기 오류입니다.");
         }
-      })
-}
+      });
+};
 
 onMounted(() => {
   getProductList()
@@ -175,6 +263,10 @@ onMounted(() => {
 </script>
 
 <style scoped>
+
+.fa-solid {
+  color: #db2424;
+}
 
 .page-container {
   display: flex;
