@@ -73,4 +73,8 @@ public class OrderService {
 
         return orderMapper.getOrderByDateRange(memberId, newStartDateString, newEndDateString);
     }
+
+    public Integer getMaxOrderId() {
+        return orderMapper.getMaxOrderId();
+    }
 }

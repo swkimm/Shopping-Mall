@@ -13,10 +13,13 @@
         <result column="pStock" property="pStock"/>
         <result column="pSize" property="pSize"/>
         <result column="pColor" property="pColor"/>
+        <result column="likeCount" property="likeCount" />
         <collection ofType="java.lang.String" property="fileName">
             <result column="fileName" />
         </collection>
+
     </resultMap>
+
 
     <resultMap id="eventProductResultMap" type="com.example.shop.response.EventProductListResponse">
         <id column="pId" property="pId" />

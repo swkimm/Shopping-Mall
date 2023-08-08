@@ -1,7 +1,9 @@
 package com.example.shop.mapper;
 
 import com.example.shop.domain.Categories;
+import com.example.shop.domain.ProductLike;
 import com.example.shop.domain.Products;
+import com.example.shop.request.InsertLikeRequest;
 import com.example.shop.request.product.DeleteImgRequest;
 import com.example.shop.request.product.DeleteLinkRequest;
 import com.example.shop.request.product.ProductUpdateRequest;
@@ -15,71 +17,174 @@ public interface ProductMapper {
 
     @Select("""
             SELECT
-            	p.pId
-            	, c.categoryId
-            	, c.categoryName
-            	, p.pName
-            	, p.pPrice
-            	, p.pBrand
-            	, p.pStatus
-            	, p.pStock
-            	, p.pSize
-            	, p.pColor
-            	, pf.fileName
+                p.pId
+                , c.categoryId
+                , c.categoryName
+                , p.pName
+                , p.pPrice
+                , p.pBrand
+                , p.pStatus
+                , p.pStock
+                , p.pSize
+                , p.pColor
+                , pf.fileName
+                , (
+                    SELECT COUNT(*) 
+                    FROM ProductLike pl
+                    WHERE pl.productId = p.pId
+                ) AS likeCount
+                , CASE
+                    WHEN pl.memberId IS NOT NULL THEN TRUE
+                    ELSE FALSE
+                    END AS liked
             FROM Products p
             LEFT JOIN 
                 Categories c ON c.categoryId = p.cId
             LEFT JOIN 
                 ProductFile pf ON pf.productId = p.pId
+            LEFT JOIN
+                ProductLike pl ON pl.productId = p.pId AND pl.memberId = #{memberId}
             WHERE c.categoryId = #{categoryId};
             """)
     @ResultMap("productResultMap")
-    List<ProductListResponse> getItemList(Integer categoryId);
+    List<ProductListResponse> getItemList(Integer categoryId, Integer memberId);
+
+
     @Select("""
-            SELECT
-            	p.pId
-            	, c.categoryId
-            	, c.categoryName
-            	, p.pName
-            	, p.pPrice
-            	, p.pBrand
-            	, p.pStatus
-            	, p.pStock
-            	, p.pSize
-            	, p.pColor
-            	, pf.fileName
-            FROM Products p
-            LEFT JOIN 
-                Categories c ON c.categoryId = p.cId
-            LEFT JOIN 
-                ProductFile pf ON pf.productId = p.pId
-            WHERE c.categoryId = #{categoryId} AND p.pBrand = #{brand};
+                SELECT
+                    p.pId
+                    , c.categoryId
+                    , c.categoryName
+                    , p.pName
+                    , p.pPrice
+                    , p.pBrand
+                    , p.pStatus
+                    , p.pStock
+                    , p.pSize
+                    , p.pColor
+                    , pf.fileName
+                    , (
+                        SELECT COUNT(*) 
+                        FROM ProductLike pl
+                        WHERE pl.productId = p.pId
+                    ) AS likeCount
+                    , CASE 
+                        WHEN pl.memberId IS NOT NULL THEN TRUE
+                        ELSE FALSE
+                      END AS liked
+                FROM Products p
+                LEFT JOIN 
+                    Categories c ON c.categoryId = p.cId
+                LEFT JOIN 
+                    ProductFile pf ON pf.productId = p.pId
+                LEFT JOIN
+                    ProductLike pl ON pl.productId = p.pId AND pl.memberId = #{memberId}
+                WHERE c.categoryId = #{categoryId} AND p.pBrand = #{brand};
             """)
     @ResultMap("productResultMap")
-    List<ProductListResponse> searchByBrand(Integer categoryId, String brand);
+    List<ProductListResponse> searchByBrand(Integer categoryId, String brand, Integer memberId);
 
     @Select("""
             SELECT
-            	p.pId
-            	, c.categoryId
-            	, c.categoryName
-            	, p.pName
-            	, p.pPrice
-            	, p.pBrand
-            	, p.pStatus
-            	, p.pStock
-            	, p.pSize
-            	, p.pColor
-            	, pf.fileName
+                p.pId
+                , c.categoryId
+                , c.categoryName
+                , p.pName
+                , p.pPrice
+                , p.pBrand
+                , p.pStatus
+                , p.pStock
+                , p.pSize
+                , p.pColor
+                , pf.fileName
+                , (
+                    SELECT COUNT(*) 
+                    FROM ProductLike pl
+                    WHERE pl.productId = p.pId
+                ) AS likeCount
+                , CASE 
+                    WHEN pl.memberId IS NOT NULL THEN TRUE
+                    ELSE FALSE
+                  END AS liked
             FROM Products p
             LEFT JOIN 
                 Categories c ON c.categoryId = p.cId
             LEFT JOIN 
                 ProductFile pf ON pf.productId = p.pId
+            LEFT JOIN
+                ProductLike pl ON pl.productId = p.pId AND pl.memberId = #{memberId}
             WHERE c.categoryId = #{categoryId} AND p.pColor = #{color};
             """)
     @ResultMap("productResultMap")
-    List<ProductListResponse> searchByColor(Integer categoryId, String color);
+    List<ProductListResponse> searchByColor(Integer categoryId, String color, Integer memberId);
+
+//    @Select("""
+//            SELECT
+//            	p.pId
+//            	, c.categoryId
+//            	, c.categoryName
+//            	, p.pName
+//            	, p.pPrice
+//            	, p.pBrand
+//            	, p.pStatus
+//            	, p.pStock
+//            	, p.pSize
+//            	, p.pColor
+//            	, pf.fileName
+//            FROM Products p
+//            LEFT JOIN
+//                Categories c ON c.categoryId = p.cId
+//            LEFT JOIN
+//                ProductFile pf ON pf.productId = p.pId
+//            WHERE c.categoryId = #{categoryId};
+//            """)
+//    @ResultMap("productResultMap")
+//    List<ProductListResponse> getItemList(Integer categoryId);
+//    @Select("""
+//            SELECT
+//            	p.pId
+//            	, c.categoryId
+//            	, c.categoryName
+//            	, p.pName
+//            	, p.pPrice
+//            	, p.pBrand
+//            	, p.pStatus
+//            	, p.pStock
+//            	, p.pSize
+//            	, p.pColor
+//            	, pf.fileName
+//            FROM Products p
+//            LEFT JOIN
+//                Categories c ON c.categoryId = p.cId
+//            LEFT JOIN
+//                ProductFile pf ON pf.productId = p.pId
+//            WHERE c.categoryId = #{categoryId} AND p.pBrand = #{brand};
+//            """)
+//    @ResultMap("productResultMap")
+//    List<ProductListResponse> searchByBrand(Integer categoryId, String brand);
+//
+//    @Select("""
+//            SELECT
+//            	p.pId
+//            	, c.categoryId
+//            	, c.categoryName
+//            	, p.pName
+//            	, p.pPrice
+//            	, p.pBrand
+//            	, p.pStatus
+//            	, p.pStock
+//            	, p.pSize
+//            	, p.pColor
+//            	, pf.fileName
+//            FROM Products p
+//            LEFT JOIN
+//                Categories c ON c.categoryId = p.cId
+//            LEFT JOIN
+//                ProductFile pf ON pf.productId = p.pId
+//            WHERE c.categoryId = #{categoryId} AND p.pColor = #{color};
+//            """)
+//    @ResultMap("productResultMap")
+//    List<ProductListResponse> searchByColor(Integer categoryId, String color);
 
 
     @Select("""
@@ -120,12 +225,12 @@ public interface ProductMapper {
     void insertFileName(Integer pId, String originalFilename);
 
     @Insert("""
-        INSERT INTO
-            ProductYoutubeLink
-            (productId, linkName)
-        VALUES
-            (#{pId}, #{linkName})
-        """)
+            INSERT INTO
+                ProductYoutubeLink
+                (productId, linkName)
+            VALUES
+                (#{pId}, #{linkName})
+            """)
     void saveYoutubeLink(Integer pId, String linkName);
 
 
@@ -211,7 +316,6 @@ public interface ProductMapper {
     List<ProductListResponse> getAllList();
 
 
-
     @Select("""
             SELECT
                 p.pId
@@ -244,12 +348,12 @@ public interface ProductMapper {
 
     // saveYoutubeLink와 동일함
     @Insert("""
-            INSERT INTO
-            ProductYoutubeLink
-            (productId, linkName)
-        VALUES
-            (#{pId}, #{linkName})
-            """)
+                INSERT INTO
+                ProductYoutubeLink
+                (productId, linkName)
+            VALUES
+                (#{pId}, #{linkName})
+                """)
     void addLink(Integer pId, String linkName);
 
 
@@ -293,4 +397,27 @@ public interface ProductMapper {
             """)
     List<GetColorCountResponse> getColorList(Integer categoryId);
 
+    @Insert("""
+            INSERT INTO ProductLike (memberId, productId)
+            VALUES(#{memberId}, #{productId})
+            """)
+    void insertLike(InsertLikeRequest insertLikeRequest);
+
+    @Delete("""
+            DELETE FROM ProductLike
+            WHERE memberId = #{memberId} AND productId = #{productId}
+            """)
+    void deleteLike(InsertLikeRequest insertLikeRequest);
+
+    @Select("""
+            SELECT productId FROM ProductLike
+            WHERE memberId = #{memberId}
+            """)
+    List<Integer> getLikedProducts(Integer memberId);
+
+    @Select("""
+            SELECT COUNT(*) FROM ProductLike
+            WHERE productId = #{productId}
+            """)
+    Integer getLikedCount(Integer productId);
 }

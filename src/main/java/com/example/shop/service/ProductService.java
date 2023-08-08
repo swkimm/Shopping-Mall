@@ -1,8 +1,10 @@
 package com.example.shop.service;
 
 import com.example.shop.domain.Categories;
+import com.example.shop.domain.ProductLike;
 import com.example.shop.domain.Products;
 import com.example.shop.mapper.ProductMapper;
+import com.example.shop.request.InsertLikeRequest;
 import com.example.shop.request.product.DeleteImgRequest;
 import com.example.shop.request.product.DeleteLinkRequest;
 import com.example.shop.request.product.ProductRequest;
@@ -38,10 +40,16 @@ public class ProductService {
     private String bucketName;
 
 
-    public List<ProductListResponse> getItemList(Integer categoryId) {
-        return productMapper.getItemList(categoryId);
+    public List<ProductListResponse> getItemList(Integer categoryId, Integer memberId) {
+        return productMapper.getItemList(categoryId, memberId);
     }
 
+    public List<ProductListResponse> searchByBrand(Integer categoryId, String brand, Integer memberId) {
+        return productMapper.searchByBrand(categoryId, brand, memberId);
+    }
+    public List<ProductListResponse> searchByColor(Integer categoryId, String color, Integer memberId) {
+        return productMapper.searchByColor(categoryId, color, memberId);
+    }
 
     public List<Categories> getCategoryList() {
         return productMapper.getCategoryList();
@@ -175,15 +183,24 @@ public class ProductService {
         return productMapper.getBrandList(categoryId);
     }
 
-    public List<ProductListResponse> searchByBrand(Integer categoryId, String brand) {
-        return productMapper.searchByBrand(categoryId, brand);
-    }
-
-    public List<GetColorCountResponse> getColorList(Integer categoryId) {
+     public List<GetColorCountResponse> getColorList(Integer categoryId) {
         return productMapper.getColorList(categoryId);
     }
 
-    public List<ProductListResponse> searchByColor(Integer categoryId, String color) {
-        return productMapper.searchByColor(categoryId, color);
+
+    public void insertLike(InsertLikeRequest insertLikeRequest) {
+        productMapper.insertLike(insertLikeRequest);
+    }
+
+    public void deleteLike(InsertLikeRequest insertLikeRequest) {
+        productMapper.deleteLike(insertLikeRequest);
+    }
+
+    public List<Integer> getLikedProducts(Integer memberId) {
+        return productMapper.getLikedProducts(memberId);
+    }
+
+    public Integer getLikedCount(Integer productId) {
+        return productMapper.getLikedCount(productId);
     }
 }

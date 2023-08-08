@@ -7,13 +7,13 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PaymentVerificationResponse {
 
-    private String impUid;
-    private int paidAmount;
+    private String merchant_uid;
+    private int amount;
     private boolean success;
 
-    public PaymentVerificationResponse(String impUid, int paidAmount, boolean success) {
-        this.impUid = impUid;
-        this.paidAmount = paidAmount;
+    public PaymentVerificationResponse(String merchant_uid, int amount, boolean success) {
+        this.merchant_uid = merchant_uid;
+        this.amount = amount;
         this.success = success;
     }
 }

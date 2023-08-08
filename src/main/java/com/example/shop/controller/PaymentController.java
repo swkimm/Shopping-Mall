@@ -81,21 +81,21 @@ public class PaymentController {
     }
 
 
-    @PostMapping("/verifyIamport/{impUid}")
+    @PostMapping("/verifyIamport/{merchant_uid}")
     public PaymentVerificationResponse verifyIamportPayment(
-            @PathVariable String impUid,
+            @PathVariable String merchant_uid,
             @RequestBody PaymentVerificationRequest request
     ) {
-        // Here, you can perform your payment verification logic
-        // For simplicity, we'll just compare the paid_amount from the request with a fixed amount
+        System.out.println("merchant_uid = " + merchant_uid);
+        System.out.println("request = " + request);
         // todo: 결제 총액 계산해서 금액 넣어줘야함
-        int fixedAmount = 5200; // Set your expected amount here
+        int fixedAmount = request.getAmount(); // Set your expected amount here
 
         PaymentVerificationResponse response = new PaymentVerificationResponse();
-        response.setImpUid(impUid);
-        response.setPaidAmount(request.getPaidAmount());
+        response.setMerchant_uid(merchant_uid);
+        response.setAmount(request.getAmount());
 
-        if (request.getPaidAmount() == fixedAmount) {
+        if (request.getAmount() == fixedAmount) {
             response.setSuccess(true);
         } else {
             response.setSuccess(false);

@@ -283,15 +283,43 @@ const testPayment = () => {
 }
 
 const paymentResult = ref(null);
+const orderCount = ref();
+
+const getMaxOrderId = () => {
+  axios.post("/api/order/getMaxOrderId")
+      .then((response) => {
+        orderCount.value = response.data
+        generateMerchantUid()
+        console.log("getMaxOrderId", response.data)
+      })
+      .catch((error) => {
+        if (error) {
+          alert("MaxOrderId 불러오기 오류 입니다.")
+        }
+      })
+}
+
+const generateMerchantUid = () => {
+  const today = new Date();
+  const year = today.getFullYear();
+  const month = String(today.getMonth() + 1).padStart(2, '0');
+  const day = String(today.getDate()).padStart(2, '0');
+  const serialNumber = String(orderCount.value).padStart(6, '0');
+
+  return `${year}${month}${day}-${serialNumber}`;
+};
+
 
 const cardPayment = () => {
   const IMP = window.IMP; // 생략 가능
   IMP.init("imp86058403"); // 예: imp00000000a
+  const merchant_uid = generateMerchantUid();
+  console.log("merchant_uid", merchant_uid)
   IMP.request_pay(
       {
         pg: "kcp.{INIBillTst}",
         pay_method: "card",
-        merchant_uid: "ORD20180131-0000012",
+        merchant_uid: generateMerchantUid(),
         name: orderInfo(order.value),
         amount: order.value.totalPrice + deliveryFee.value,
         buyer_email: member.value.email,
@@ -305,7 +333,7 @@ const cardPayment = () => {
         if (rsp.success) {
           // 결제 성공 시 로직
           paymentResult.value = rsp;
-          verifyPayment(rsp.imp_uid, rsp.paid_amount);
+          verifyPayment(rsp.merchant_uid, rsp.amount);
           savePayInfo();
         } else {
           // 결제 실패 시 로직
@@ -316,15 +344,18 @@ const cardPayment = () => {
 };
 
 // Function to verify payment
-const verifyPayment = (impUid, paidAmount) => {
+const verifyPayment = (merchant_uid, amount) => {
   // 결제검증
-  axios.post(`/verifyIamport/${impUid}`)
+  axios.post(`/api/verifyIamport/${merchant_uid}`, {
+    merchant_uid : merchant_uid,
+    amount : amount
+  })
       .then(response => {
         const data = response.data;
         console.log(data);
 
         // Compare rsp.paid_amount with data.response.amount to perform verification
-        if (paidAmount === data.response.amount) {
+        if (amount === data.response.amount) {
           alert("결제 및 결제검증완료");
         } else {
           alert("결제 실패");
@@ -353,7 +384,7 @@ const savePayInfo = () => {
   axios.post("/api/payment/savePayInfo", paymentInfo)
       .then((response) => {
         console.log(response.data)
-        location.reload()
+        // location.reload()
         isInPayment()
         router.push('/paymentSuccess');
       })
@@ -395,6 +426,7 @@ const savePayInfo = () => {
 // };
 
 onMounted(async () => {
+  await getMaxOrderId();
   await getOrderMemberInfo();
   await getOrderId();
   if (authority.value === 2) {

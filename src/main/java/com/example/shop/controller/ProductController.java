@@ -1,6 +1,8 @@
 package com.example.shop.controller;
 
 import com.example.shop.domain.Categories;
+import com.example.shop.domain.ProductLike;
+import com.example.shop.request.InsertLikeRequest;
 import com.example.shop.request.product.DeleteImgRequest;
 import com.example.shop.request.product.DeleteLinkRequest;
 import com.example.shop.request.product.ProductRequest;
@@ -9,6 +11,7 @@ import com.example.shop.response.*;
 import com.example.shop.service.ProductService;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -35,26 +38,31 @@ public class ProductController {
     @PostMapping("/products/item/getList")
     public List<ProductListResponse> getList(@RequestBody Map<String, Object> request) {
         Integer categoryId = (Integer) request.get("categoryId");
+        Integer memberId = (Integer) request.get("memberId");
         System.out.println("categoryId = " + categoryId);
-        return productService.getItemList(categoryId);
+        System.out.println("memberId = " + memberId);
+        return productService.getItemList(categoryId, memberId);
     }
 
     @PostMapping("/products/item/searchByBrand")
     public List<ProductListResponse> searchByBrand(@RequestBody Map<String, Object> request) {
         Integer categoryId = (Integer) request.get("categoryId");
         String brand = (String) request.get("brand");
+        Integer memberId = (Integer) request.get("memberId");
         System.out.println("categoryId = " + categoryId);
         System.out.println("brand = " + brand);
-        return productService.searchByBrand(categoryId, brand);
+        return productService.searchByBrand(categoryId, brand, memberId);
     }
 
     @PostMapping("/products/item/searchByColor")
     public List<ProductListResponse> searchByColor(@RequestBody Map<String, Object> request) {
         Integer categoryId = (Integer) request.get("categoryId");
         String color = (String) request.get("color");
+        Integer memberId = (Integer) request.get("memberId");
+
         System.out.println("categoryId = " + categoryId);
         System.out.println("color = " + color);
-        return productService.searchByColor(categoryId, color);
+        return productService.searchByColor(categoryId, color, memberId);
     }
 
     @PostMapping("/categories/getCategoryList")
@@ -173,14 +181,35 @@ public class ProductController {
         return productService.getColorList(categoryId);
     }
 
+    @PostMapping("/products/insertLike")
+    public void insertLike(@RequestBody Map<String, Object> request) {
+        Integer memberId = (Integer) request.get("memberId");
+        Integer productId = (Integer) request.get("productId");
+        Boolean liked = (Boolean) request.get("liked");
+        System.out.println("Liked = " + liked);
+        System.out.println("memberId = " + memberId);
+        System.out.println("productId = " + productId);
+        InsertLikeRequest insertLikeRequest = new InsertLikeRequest();
+        insertLikeRequest.setMemberId(memberId);
+        insertLikeRequest.setProductId(productId);
+        insertLikeRequest.setLiked(liked);
+        System.out.println("insertLikeRequest = " + insertLikeRequest);
+        if (liked.equals(true)) {
+            productService.insertLike(insertLikeRequest);
+        } else {
+            productService.deleteLike(insertLikeRequest);
+        }
+    }
 
-//    @PostMapping("/products/updateProduct/{pId}")
-//    public void updateProduct(@PathVariable("pId") Integer pId, ProductGetResponse productGetResponse,
-//                                @RequestParam(value = "addFiles", required = false) MultipartFile[] addFiles,
-//                                @RequestParam(value = "removeFiles", required = false) List<String> removeFileNames) throws Exception {
-//
-//        productService.updateProduct(pId, productGetResponse, addFiles, removeFileNames);
-//        System.out.println("productGetResponse = " + productGetResponse);
-//    }
+    @PostMapping("/products/likedProducts")
+    public List<Integer> getLikedProducts(@RequestBody Map<String, Integer> request) {
+        Integer memberId = request.get("memberId");
+        return productService.getLikedProducts(memberId);
+    }
+
+    @PostMapping("/products/getLikedCount/{productId}")
+    public Integer getLikedCount(@PathVariable Integer productId) {
+        return productService.getLikedCount(productId);
+    }
 
 }

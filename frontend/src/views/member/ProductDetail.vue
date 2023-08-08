@@ -28,7 +28,8 @@
         <br>
         <h5>색상 : {{ product.pcolor }}</h5>
         <h5>사이즈 : {{ product.psize }}</h5>
-        <h5>브랜드 : {{ product.pbrand }}</h5><br>
+        <h5>브랜드 : {{ product.pbrand }}</h5>
+        <h5 class="liked"><i style="color: #db2424" class="fa-solid fa-heart fa-xl"></i> <strong>{{ likedCount }}</strong></h5><br>
         <h5>수량</h5>
         <select class="form-select" v-model="quantity" style="width: 100px;">
           <option v-for="n in 10" :key="n" :value="n">{{ n }}개</option>
@@ -242,6 +243,21 @@ const getEventProductList = () => {
       });
 };
 
+const likedCount = ref();
+
+const getLikedCount = () => {
+  axios.post(`/api/products/getLikedCount/${props.pId}`)
+      .then((response) => {
+        likedCount.value = response.data
+        console.log(response.data)
+      })
+      .catch((error) => {
+        if (error) {
+          alert("좋아요 개수 가져오기 오류입니다.")
+        }
+      })
+}
+
 const getProductYoutubeLinkList = () => {
   axios.post(`/api/products/getYoutubeLinkList/${props.pId}`)
       .then((response) => {
@@ -286,6 +302,7 @@ const scrollToTop = () => {
 onMounted(() => {
   getEventProductList();
   getProductDetail();
+  getLikedCount();
   scrollToTop();
 });
 
@@ -297,6 +314,10 @@ watch(() => props.pId, (newValue) => {
 
 
 <style scoped>
+.liked {
+  color : red;
+}
+
 .productInfo {
   text-align: left;
 }
