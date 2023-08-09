@@ -203,4 +203,12 @@ public class ProductService {
     public Integer getLikedCount(Integer productId) {
         return productMapper.getLikedCount(productId);
     }
+
+    public List<ProductListResponse> getLikedProductId(Integer memberId) {
+        return productMapper.getLikedProductId(memberId);
+    }
+
+    public void deleteLikeByProductId(Integer memberId, Integer productId) {
+        productMapper.deleteLikeByProductId(memberId, productId);
+    }
 }

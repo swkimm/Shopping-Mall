@@ -420,4 +420,44 @@ public interface ProductMapper {
             WHERE productId = #{productId}
             """)
     Integer getLikedCount(Integer productId);
+
+    @Select("""
+            SELECT
+                p.pId
+                , c.categoryId
+                , c.categoryName
+                , p.pName
+                , p.pPrice
+                , p.pBrand
+                , p.pStatus
+                , p.pStock
+                , p.pSize
+                , p.pColor
+                , pf.fileName
+                , (
+                    SELECT COUNT(*) 
+                    FROM ProductLike pl
+                    WHERE pl.productId = p.pId
+                ) AS likeCount
+                , CASE
+                    WHEN pl.memberId IS NOT NULL THEN TRUE
+                    ELSE FALSE
+                    END AS liked
+            FROM Products p
+            LEFT JOIN 
+                Categories c ON c.categoryId = p.cId
+            LEFT JOIN 
+                ProductFile pf ON pf.productId = p.pId
+            LEFT JOIN
+                ProductLike pl ON pl.productId = p.pId 
+            WHERE pl.memberId = #{memberId};
+            """)
+    @ResultMap("productResultMap")
+    List<ProductListResponse> getLikedProductId(Integer memberId);
+
+    @Delete("""
+            DELETE FROM ProductLike
+            WHERE memberId = #{memberId} AND productId = #{productId}
+            """)
+    void deleteLikeByProductId(Integer memberId, Integer productId);
 }

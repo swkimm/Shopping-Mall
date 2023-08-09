@@ -212,4 +212,17 @@ public class ProductController {
         return productService.getLikedCount(productId);
     }
 
+    @PostMapping("/products/getLikedProductId")
+    public List<ProductListResponse> getLikedProductId(@RequestBody Map<String, Integer> request) {
+        Integer memberId = request.get("memberId");
+        return productService.getLikedProductId(memberId);
+    }
+
+    @PostMapping("/products/deleteLikeByProductId")
+    public void deleteLikeByProductId(@RequestBody Map<String, Integer> request) {
+        Integer memberId = request.get("memberId");
+        Integer productId = request.get("productId");
+        productService.deleteLikeByProductId(memberId, productId);
+    }
+
 }
