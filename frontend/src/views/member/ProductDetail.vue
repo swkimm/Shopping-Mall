@@ -334,6 +334,7 @@ watch(() => props.pId, (newValue) => {
 .card-wrapper {
   display: flex;
   flex-wrap: wrap;
+  cursor: pointer;
 }
 
 .card {

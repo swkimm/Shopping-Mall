@@ -1,49 +1,52 @@
 <template>
   <div>
     <div v-if="shouldShowFirstContent || user === null">
-        <nav class="navbar navbar-expand-lg bg-body-tertiary">
-          <div class="container-fluid">
-            <RouterLink class="navbar-brand" aria-current="page" to="/">TouchDown</RouterLink>
-            <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
-              <!-- 로그인 기능 구현 후 authority 값으로 수정  -->
-              <ul class="navbar-nav">
-                <li class="nav-item">
-                  <RouterLink class="nav-link active" aria-current="page" to="/helmets">헬멧</RouterLink>
-                </li>
-                <li class="nav-item">
-                  <RouterLink class="nav-link active" aria-current="page" to="/shoulderPads">숄더 패드</RouterLink>
-                </li>
-                <li class="nav-item">
-                  <RouterLink class="nav-link active" aria-current="page" to="/apparel">의류</RouterLink>
-                </li>
-                <li class="nav-item">
-                  <RouterLink class="nav-link active" aria-current="page" to="/accessories">악세서리</RouterLink>
-                </li>
-              </ul>
-            </div>
+      <nav class="navbar navbar-expand-lg bg-body-tertiary">
+        <div class="container-fluid">
+          <RouterLink class="navbar-brand" aria-current="page" to="/">TouchDown</RouterLink>
+          <div class="collapse navbar-collapse justify-content-center" id="navbarSupportedContent">
+            <!-- 로그인 기능 구현 후 authority 값으로 수정  -->
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <RouterLink class="nav-link active" aria-current="page" to="/helmets">헬멧</RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink class="nav-link active" aria-current="page" to="/shoulderPads">숄더 패드</RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink class="nav-link active" aria-current="page" to="/apparel">의류</RouterLink>
+              </li>
+              <li class="nav-item">
+                <RouterLink class="nav-link active" aria-current="page" to="/accessories">악세서리</RouterLink>
+              </li>
+            </ul>
+          </div>
+          <div class="navbar-item">
             <form class="d-flex" role="search">
               <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
               <button class="btn btn-outline-success" type="submit">Search</button>
             </form>
-            <div v-if="user === null" class="nav-item">
-              <RouterLink class="nav-link active" aria-current="page" to="/login">
-                <i class="fa-solid fa-sign-in fa-xl"></i>
-              </RouterLink>
-            </div>
-            <div v-else-if="user !== null">
-              <button @click="logout" class="nav-item nav-link active fa-solid fa-sign-out fa-xl"
-                      style="background-color: white; color: black"></button>
-              <button @click="profile" class="nav-item nav-link active fa-solid fa-user fa-xl"
-                      style="background-color: white; color: black"></button>
-              <button @click="liked" class="nav-item nav-link active fa-solid fa-heart fa-xl"
-                      style="background-color: white; color: black"></button>
-            </div>
-            <div class="navbar-item">
-              <RouterLink @click="askLoginOrGoToCart" to="/cart" class="fa-solid fa-cart-shopping fa-xl" style="background-color: white; color: black"></RouterLink>
-            </div>
           </div>
-        </nav>
-      </div>
+          <div v-if="user === null" class="navbar-item">
+            <RouterLink class="nav-item nav-link active" aria-current="page" to="/login">
+              <i class="fa-solid fa-sign-in fa-xl"></i>
+            </RouterLink>
+          </div>
+          <div class="navbar-item" v-else-if="user !== null">
+            <button @click="logout" class="nav-item nav-link active fa-solid fa-sign-out fa-xl"
+                    style="background-color: white; color: black"></button>
+            <button @click="profile" class="nav-link active fa-solid fa-user fa-xl"
+                    style="background-color: white; color: black"></button>
+            <button @click="liked" class="nav-item nav-link active fa-solid fa-heart fa-xl"
+                    style="background-color: white; color: black"></button>
+          </div>
+          <div class="navbar-item">
+            <RouterLink @click="askLoginOrGoToCart" to="/cart" class="fa-solid fa-cart-shopping fa-xl"
+                        style="background-color: white; color: black"></RouterLink>
+          </div>
+        </div>
+      </nav>
+    </div>
 
     <!-- 로그인 기능 구현 후 authority가 2(admin)인 경우 header가 변경됨 -->
     <div v-else>
@@ -66,12 +69,12 @@
               </li>
             </ul>
           </div>
-          <div v-if="user === null" class="nav-item">
+          <div v-if="user === null" class="navbar-item">
             <RouterLink class="nav-link active" aria-current="page" to="/login">
               <i class="fa-solid fa-sign-in fa-xl"></i>
             </RouterLink>
           </div>
-          <div v-else-if="user !== null">
+          <div class="navbar-item" v-else-if="user !== null">
             <button @click="logout" class="nav-item nav-link active fa-solid fa-sign-out fa-xl"
                     style="background-color: white; color: black"></button>
             <button @click="profile" class="nav-item nav-link active fa-solid fa-user fa-xl"
